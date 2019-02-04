@@ -49,7 +49,7 @@ O **manage.py** é o endpoint do Djngo. Vamos utilizá-lo para ativar todos os r
   
 Para pode acessar o manage.py a partir de outras pastas, podemos criar um *alias*:
 ```commandline
-alias manage='python $VIRTUAL_VENV/../manage.py'
+alias manage='python $VIRTUAL_ENV/../manage.py'
 ```
 Esse *alias* pode ser adicionado ao `~/.bashhrc` ou `~/.profile`;  
 
@@ -103,7 +103,7 @@ def home(reques):
 Em `core` criamos novo diretório chamado *templates* e dentro criamos *index.html*;  
 Editamos a HTML para exibir o que desejamos e vemos rodar o servidor para ver o resultado.  
 
-## M1A25  
+## M1A26  
 
 ### Adicionando arte do designer  
 
