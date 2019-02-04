@@ -181,7 +181,7 @@ Capacidade de parsear e identificar dicionario de configuração do Django
 #### Configuração
 Criar uma url default:
 ```python
-default_dburl = 'sql:///' + os.path.join(BASE_DIR, 'db.sqlite3')
+default_dburl = 'sqlite:///' + os.path.join(BASE_DIR, 'db.sqlite3')
 DATABASES = {
     'default': config('DATABASE_URL', default_dburl, cast=dburl),
     }
