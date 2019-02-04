@@ -131,3 +131,144 @@ Para fazer alteração de tudo usando o find/replace usando expressões regulare
 
 `(src|href)="((img|css|js).*?)"`
 Replace: `$1="{% static '$2' %} "`  
+
+## M1A27  
+
+### Deploy no Heroku  
+
+Instalando `heroku toolbelt`:  
+`sudo snap install --classic heroku`
+
+##### login
+
+`heroku login`
+
+## M1A28  
+
+Algumas configurações necessárias antes do deploy pois temos um projeto com várias instancias. Precisamos separar do codigo os elementos que são das instancias e não do projeto.  
+
+**Não deixar SECRET_KEY dentro do codigo fonte!!!!**  
+
+### Python-decouple  
+
+[python-decouple](https://pypi.org/project/python-decouple/)  
+#### Instalação:  
+
+`pip install python-decouple`    
+
+Em `setting.py`:  
+`from decouple import config`  
+
+substituir `SECRET_KEY = ASASAQW` por `SECRET_KEY = config('SECRET_KEY')`.  
+Sendo que o primeiro será adicionado a um arquivo `.env` na raiz do nosso projeto (**Removendo aspas e espaços**).  
+
+Mesma coisa com `DEBUG`:
+Settings: `DEBUG = config('DEBUG', default=False, cast=bool`  
+.env: `DEBUG=True`  
+
+### Base de dados  
+Usar sqlite3 em desenvolvimento mas não em produção (usar PostgreSQL)
+
+### Python dj-database  
+
+[dj-database](https://pypi.org/project/dj-database-url/)
+
+#### Instalação:  
+`pip install dj-database-url`  
+
+Capacidade de parsear e identificar dicionario de configuração do Django  
+
+#### Configuração
+Criar uma url default:
+```python
+default_dburl = 'sql:///' + os.path.join(BASE_DIR, 'db.sqlite3')
+DATABASES = {
+    'default': config('DATABASE_URL', default_dburl, cast=dburl),
+    }
+```
+
+### Allowed Hosts  
+
+Heroku necesita saber se vai escutar tudo. Para isso:  
+`ALLOWED_HOSTS = [*]`
+
+### Configurando static files  
+
+Para onde serão copiados todos os arquivos estaticos que no momento estão no core>static  
+Como se trata de arquivos estatucos, não faz sentido passar por todo o processo sempre. Podemos separar em outro servidor, se for o caso.  
+em `settings`: 
+```python
+STATICS_URL: '/static'
+STATICS_ROOT: os.path.join(BASE_DIR, 'staticfiles') #   
+ 
+```
+
+### dj-static  
+
+> Para servir os arquivos estaticos antes de chegar a requisição ao Django;  
+
+
+[dj-static](https://pypi.org/project/dj-static/)
+  
+Agora vamos ao `wsgi.py` e alteramos para:  
+```python
+import os
+from dj_static import Cling
+from django.core.wsgi import get_wsgi_application
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'eventex.settings')
+
+application = Cling(get_wsgi_application())
+```  
+### Registrando dependencias do projeto  
+
+No terminal:  
+`pip freeze > requirements.txt`
+```commandline
+dj-database-url==0.5.0
+dj-static==0.0.6
+Django==2.1.5
+pkg-resources==0.0.0
+python-decouple==3.1
+pytz==2018.9
+static3==0.7.0
+```
+
+**Porém `heroku` tem algumas outras dependencias.**
+Devemos incluir:  
+`gunicorn=19.8.1`
+`psycopg2=2.7.4`
+
+### Criando arquivo para heroku iniciar o programa  
+
+Criar `Procfile`na raiz do projeto (wttd); **Com P MAIUSCULO e sem extenção**;  
+  
+Adicionar:
+`web: gunicorn eventex.wsgi --log-file -`
+
+## Sobre repositório GIT  
+Adicionar apenas arquivos fonte. Não adicionar arquivos gerados a partir de processamento...
+
+`.idea` é relacionado ao projeto pycharm.
+Remover o sqlite3 caso ele não vá ser usado (como é o nosso caso);  
+
+### Heroku:  
+
+`heroku apps:create eventex-felipesbarros`  
+Para confirmar  
+`git remote -v`  
+Para confirmar criação app:  
+`heroku open`   
+
+### Configurar variáveis de ambiente produção/projeto  
+Para saber as variáveis:
+`cat .env`  
+
+Usando aspas simples!  
+`heroku config:set SECRET_KEY = 'COPIAR O Que ESTA EM .env'`  
+
+`heroku config:set DEBUG=True`  
+
+#### Enviando ao Heroku:  
+
+`git push heroku master --force`  
