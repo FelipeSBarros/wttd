@@ -109,3 +109,25 @@ Editamos a HTML para exibir o que desejamos e vemos rodar o servidor para ver o 
 
 Em `core`, adicionar uma nova pasta `static` onde colocaremso os arquivos estaticos: `css, fonts, img, js`  
 E o arquivo `index.html` vai para o `template`, substituir o `index.html` criando antes;  
+
+Todos os arquivos estaticos tiveram erro (404) pq os caminhos relativos do designer não bate já que estamos usando o Django para isso e usando pastas diferentes:
+```commandline
+"GET /img/sponsor-silver-04.png HTTP/1.1" 404 2115
+```
+
+#### Template tag:  
+
+Adicionamos no início do index.hmtl:
+{% load static %}  
+
+E alteramos todos os path relativos que deram erro (ex.: `img/favicon.ico`), ficando: 
+<link rel="shortcut icon" href=" { % statuc% 'img/favicon.ico' % } ">  
+
+**O que está entre chaves é o template do Django. o memso será processado pelo template e retornado**;  
+Sugestão: aspas dupla (") para HTML e aspas simples (') para Django teplate;  
+
+
+Para fazer alteração de tudo usando o find/replace usando expressões regulares:  
+
+`(src|href)="((img|css|js).*?)"`
+Replace: `$1="{% static '$2' %} "`  
