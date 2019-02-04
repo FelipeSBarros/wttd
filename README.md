@@ -186,6 +186,7 @@ DATABASES = {
     'default': config('DATABASE_URL', default_dburl, cast=dburl),
     }
 ```
+Dessa forma, sempre que for rodada a app, o decouple busca se o `DATABASE_URL` exite no `.env`. Não existindo ele usa o `default_dburl` (SQLite), usando o cast que irá retorná-lo como um dicionário de configuração do Django;  
 
 ### Allowed Hosts  
 
@@ -196,7 +197,7 @@ Heroku necesita saber se vai escutar tudo. Para isso:
 
 Para onde serão copiados todos os arquivos estaticos que no momento estão no core>static  
 Como se trata de arquivos estatucos, não faz sentido passar por todo o processo sempre. Podemos separar em outro servidor, se for o caso.  
-em `settings`: 
+em `settings`:  
 ```python
 STATICS_URL: '/static'
 STATICS_ROOT: os.path.join(BASE_DIR, 'staticfiles') #   
@@ -220,6 +221,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'eventex.settings')
 
 application = Cling(get_wsgi_application())
 ```  
+
 ### Registrando dependencias do projeto  
 
 No terminal:  
