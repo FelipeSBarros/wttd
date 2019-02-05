@@ -199,8 +199,8 @@ Para onde serão copiados todos os arquivos estaticos que no momento estão no c
 Como se trata de arquivos estatucos, não faz sentido passar por todo o processo sempre. Podemos separar em outro servidor, se for o caso.  
 em `settings`:  
 ```python
-STATICS_URL: '/static'
-STATICS_ROOT: os.path.join(BASE_DIR, 'staticfiles') #   
+STATIC_URL: '/static'
+STATIC_ROOT: os.path.join(BASE_DIR, 'staticfiles') #   
  
 ```
 
