@@ -15,7 +15,7 @@ Passos:
 1. Adiciona app `core` ao settings (`eventex.core`);  
 1. Configuramos uma rota para a raiz do site;  
 1. Associamos a rota a uma view home dentro da app `core`;  
-1. Criamso a index.html;    
+1. Criamos a index.html;    
 
 ### Organização  
 
@@ -45,9 +45,9 @@ django-admin startproject eventex . #eventex e o nome do projeto; o ponto indica
   
 O projeto criado é um pacote de python, uma vez que possui o dunder init (`__init___`)
 
-O **manage.py** é o endpoint do Djngo. Vamos utilizá-lo para ativar todos os recursos do Django.  
+O **manage.py** é o endpoint do Django. Vamos utilizá-lo para ativar todos os recursos do Django.  
   
-Para pode acessar o manage.py a partir de outras pastas, podemos criar um *alias*:
+Para poder acessar o manage.py a partir de outras pastas, podemos criar um *alias*:
 ```commandline
 alias manage='python $VIRTUAL_ENV/../manage.py'
 ```
@@ -61,12 +61,12 @@ manage runserver
 
 ### Criando  uma Django app  
 
-app é uma biblioteca python que segue conversões do Django.
+app é uma biblioteca python que segue conveções do Django.
 
 ```commandline
 manage startapp core #core e o nome dado a app
 ```
-Nossa app criada deve estar dentro da pasta do projeto Django (eventex, neste caso), que estará dentro do diretório de trabalho (wttd, neste caso).  
+Nossa app criada (*core*) deve estar dentro da pasta do projeto Django (*eventex*, neste caso), que estará dentro do diretório de trabalho (*wttd*, neste caso).  
 Nota mental: Por isso, mais à frente vamos inserir em `settings.py` o `eventex.core` em `INSTALLED_APPS`  
   
 * Manage.py está alinhado ao eventx (é irmão);
@@ -104,6 +104,9 @@ Em `core` criamos novo diretório chamado *templates* e dentro criamos *index.ht
 Editamos a HTML para exibir o que desejamos e vemos rodar o servidor para ver o resultado.  
 
 ## M1A26  
+  
+1. Adicionamos ao *tamplate* a arte (pagina) do designer;  
+1. Mudamos o caminho aos arquivos;    
 
 ### Adicionando arte do designer  
 
@@ -133,7 +136,10 @@ Para fazer alteração de tudo usando o find/replace usando expressões regulare
 Replace: `$1="{% static '$2' %} "`  
 
 ## M1A27  
-
+  
+1. Instalação do heroku
+1. Login
+  
 ### Deploy no Heroku  
 
 Instalando `heroku toolbelt`:  
@@ -144,7 +150,12 @@ Instalando `heroku toolbelt`:
 `heroku login`
 
 ## M1A28  
-
+  
+1. Usamos o `python-decouple` para não deixar secret_key no codigo fonte do nosso projeto;  
+1. Usamos o `dj-database` para quando estivermos em produção, usar o Postgre e não o SQLite;  
+1. Habiitamos `static_files` com `dj-static`;  
+1. Registramos e atutenticamos o projeto e enviamos ao *Heroku* por git;   
+  
 Algumas configurações necessárias antes do deploy pois temos um projeto com várias instancias. Precisamos separar do codigo os elementos que são das instancias e não do projeto.  
 
 **Não deixar SECRET_KEY dentro do codigo fonte!!!!**  
