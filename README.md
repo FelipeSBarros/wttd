@@ -334,7 +334,7 @@ Ficando:
 Caso houvesse domínio customizados, seria o caso de adiciona-lo apos virgula.  
 
 O heroku config fica assim:
-```python
+```commandline
 heroku config
 === eventex-felipesbarros Config Vars
 ALLOWED_HOSTS: .herokuapp.com
@@ -343,4 +343,10 @@ DEBUG:         True
 SECRET_KEY:    aaa
 ```
   
-Agora e mandar as alterações ao Heroku pelo Git:  
+Agora e mandar as alterações ao Heroku pelo Git.
+
+**Isso tudo foi feito para que possamos trabalhar em diferentes configurações de ambiente (desenvolvimento/produção) garantindo que`DEBUG`, `ALLOWED_HOSTS` serão bem carregados;
+Diferença entre config de instancia e config de projeto:  
+
+> Nos arquivos do projeto estão as configurações de instancia; No .env definimos as configurações de projeto, podendo assim, alternar entre produção e desenvolvimento sem ter que mudar a configuração das instancias, já que as mesmas passaram a ser configuradas pelo .env, usando de `decouple`;
+> Projeto: codigo fonte (config das app); Já allowed_hosts, secret_key, email, etc são confirgurações de instancia; Com decouple permite que as configurações de instancias seja carregadas de acordo com as variáveis de ambiente;
