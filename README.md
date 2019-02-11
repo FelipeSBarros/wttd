@@ -285,3 +285,62 @@ Usando aspas simples!
 #### Enviando ao Heroku:  
 
 `git push heroku master --force`  
+
+## M2A01  
+
+Sobre atualização de versões do Django:
+
+Usar freeze para checar a versão;
+Para upgrade:  
+`pip install --upgrade django`  
+**Atualizar o freeze!**
+usar:
+`manage check` Para identificar se há alguma modificação a ser feito devido ao *update*;  
+`manage test` Para ver se precisa alterar algo de teste...  
+commitar e enviar ao heroku;  
+
+## M2A03  
+
+Mandamos nosso site para produção, mas deixamos o `DEBUG = True`, o que é perigoso por expor algumas informações sensíveis;  
+Para corrigir isso:
+No ambiente virtual:
+`heroku config:set DEBUG=False`  
+
+Para mais informações:
+`heroku config --help`
+
+### **Explorando flag DEBUG**
+Em settings, "setar" `ALLOWED_HOSTS = []`  
+ 
+ Se DEBUG = False temos que definir o `ALLOWED_HOSTS` e também o `collect static`:  
+ `python3 manage.py collectstatic`;
+ 
+ A ideia geral é que em desenvolvimento, vamos permitir dois hosts: 127.0.0.1 e o localhost (e qualquer subsominio de localhost);
+ `ALLOWED_HOSTS = ['127.0.0.1', '.localhost', '.herokuapp.com']`
+ 
+ Como o `ALLOWED_HOST` é a configuração da instancia, temos que ir ao `.env`, para adicionar o `ALLOWED_HOST`:
+`ALLOWED_HOSTS=127.0.0.1, .localhost, .herokuapp.com`  
+
+Configurando o `DECOUPLE` também:
+`ALLOWED_HOSTS = config('ALLOWED_HOSTS', default=[], cast=Csv())`
+**E a linha criada anteriormente (ALLOWED_HOSTS) já poderá ser removida!**  
+  
+  **Não deixar de agregar *Csv* ao import**:
+Ficando:
+`from decouple import config, Csv`  
+
+**Agora é configurar a var de ambiente e enviar ao Heroku**
+`heroku config:set ALLOWED_HOSTS=.herokuapp.com`
+Caso houvesse domínio customizados, seria o caso de adiciona-lo apos virgula.  
+
+O heroku config fica assim:
+```python
+heroku config
+=== eventex-felipesbarros Config Vars
+ALLOWED_HOSTS: .herokuapp.com
+DATABASE_URL:  postgres://qbkkdmugaqbukg:88e[...]h68f
+DEBUG:         True
+SECRET_KEY:    aaa
+```
+  
+Agora e mandar as alterações ao Heroku pelo Git:  
