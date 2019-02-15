@@ -350,3 +350,57 @@ Diferença entre config de instancia e config de projeto:
 
 > Nos arquivos do projeto estão as configurações de instancia; No .env definimos as configurações de projeto, podendo assim, alternar entre produção e desenvolvimento sem ter que mudar a configuração das instancias, já que as mesmas passaram a ser configuradas pelo .env, usando de `decouple`;
 > Projeto: codigo fonte (config das app); Já allowed_hosts, secret_key, email, etc são confirgurações de instancia; Com decouple permite que as configurações de instancias seja carregadas de acordo com as variáveis de ambiente;
+
+## M2A04  
+
+Arquivos estáticos X Media:  
+Como o Django organiza e como não se enrolar;  
+  
+* Static: Arquivos estáticos que são parte do código fonte do seu projeto; Estão intrínsecamente vinculados ao código fonte;
+    - css; javascripts; fontes; imagens fixas como logo;  
+    - static entra no sistema quando se faz um deploy; Está conectado ao ciclo do sistema;  
+* Media: Arquivos envidos ao sistem pelo usuário:
+    - foto de perfil; planilhas; arquivos zip; qualquer anexo de upload;
+    - entra no sistema quando o usuário faz upload; Tem que estar disponível idependente do *realease* do sistema.  
+    
+Quando estamos com `DEBUG=Flase` o Django não facilita a nossa vida. Ele não liga para os arquivos estáticos;
+
+`manage collectstatic` faz com que o Django corra todo o sistema buscando os arquivos estáticos e os coloca em `proj/staticfiles`. Inclusive arquivos estáticos do Django admin;  
+Django não garante a segurança do serviço dos arquivos estaticos; o dj-statics, sim.
+
+Para provar como seria isso sem o dj-static, podemos desativa-lo no wsgi.py;  
+Mesmo os dados estando na pasta staticfiles o Django não serve os arquivos, estando DEBUG=False e o dj-static (Cling) desabilitados (sem uso);  
+O dj-static é necessário quando estivermos usando o Heroku;  
+
+**Quando for deixar os staticsfiles em outro servidor/domínio diferente de onde está a aplicação Django, basta em static_URL e informar o link e porta apra os staticfiles.**  
+Assim , pode-se ter uma aplicação divida em dois servidores:  
+  
+* Um servidor dedicado à aplicação (pagina dinâmica);
+* Outro servidor dedicado aos arquivos estáticos;  
+
+Exemplos do processo de serviço dos arquivos estáticos:  
+
+![](./imgAnotacoes/staticfilesDiagrama.png)  
+
+![](./imgAnotacoes/staticfilesHeroku.png)  
+
+![](./imgAnotacoes/staticfileAmazon.png)  
+
+Toda essa aula foi voltada para mostrar como o Django serve os arquivos estáticos, como o Heroku o processa e alternativas relacionadas a isso.  
+
+## M2A05  
+
+**TAFT: Test All The Fucking Time!**  
+
+## M2A07  
+
+**Todo erro diferente de assertionError é considerado ERRO no teste;**
+**Quando temos assertionError, temos uma falha!**
+**Resolver erro é mais prioritário que resolver falha**
+
+
+**Katar**: Esculpir o código conforme a demanda do teste
+
+**TDD não é fazer teste combinatório de tudo o que é possível e imaginável**; É criar código com confiança dos limites do código;
+
+**O ideal é que as funções tenham apenas um `return`:. um ponto de saida.**
