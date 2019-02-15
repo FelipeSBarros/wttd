@@ -404,3 +404,49 @@ Toda essa aula foi voltada para mostrar como o Django serve os arquivos estátic
 **TDD não é fazer teste combinatório de tudo o que é possível e imaginável**; É criar código com confiança dos limites do código;
 
 **O ideal é que as funções tenham apenas um `return`:. um ponto de saida.**
+
+## M2A08  
+
+**Um problema em se usar `assert` é que ele para onde houve erro. Não executa os demais testes;**  
+A ideia é rodar todos os teste;  
+
+Se assert é uma excessão podemos usar um try/except; Como teríamos que fazer isso a cada um dos testes, pode-se incluir isso em uma função:
+```python
+def assert_true(expr):
+    try:
+        assert expr
+    except AssertError:
+        print(expr)
+```
+
+### unittest  
+
+classe desenvolvida para facilitar todo o processo de desenvolvimento de testes.
+
+unittest.CaseTest: clase usadas
+unittest.main(): executa os testes
+Os testes passam a ser executados pelo test runner;
+O interessante de usar o unittest é que além da facilidade, pode-se usar  terminal python, o comando:
+`python -m unittest`
+Que ele vai varrer os arquivos com extensão .py que tenham `unittest.main()` e os executa, tendo um relatório bem organizado de todos os *testes*, *falhas* e *erros*;  
+  
+#### O que o unittest faz?
+  
+* A partir do dir corrente, o testRunner, vai:
+    * Procurar e carregar o módulo/package test*.py; (**Suites de teste**)  
+    * Identifica cada cenário de teste; (**testCase**)  
+    * Identificad cada teste nos cenários de teste; (**TestMethod**)  
+    * Executa o *SetUp* (prepara o contexto do teste), *Teste*, e *tearDown* (limpa efeitos colaterais do teste) para cada teste;  
+
+**Executando o teste no Django:**
+`manage test`  
+`manage test eventex.core` (só teste dentro do core)  
+`manage test eventex.core.HomeTest` (apenas um cenário: HomeCore - clase TesteCase dentro do pacote)  
+`manage test eventex.core.HomeTest.test_get` (apenas um método específico, o `test_get` dentro cenário HomTest)  
+
+Há vários `asserts` do unittest. E o Django incrementa a lista  
+
+![](./imgAnotacoes/assertUnittest.png)    
+    
+![](./imgAnotacoes/assertDjango.png)  
+
