@@ -489,3 +489,37 @@ Usando o assert: `self.assertTemplateUsed(response, 'index.html')` podemos confi
         self.assertTemplateUsed(response, 'index.html')
 ```  
 
+No fim o test.py ficou assim:
+```python
+from django.test import TestCase
+
+class HomeTest(TestCase):
+    def setUp(self):
+        self.response = self.client.get('/')
+
+    def test_get(self,):
+        """"GET / must return status code 200"""
+        self.assertEqual(200, self.response.status_code)
+    def test_template(self):
+        """"Must use index.html"""
+        self.assertTemplateUsed(self.response, 'index.html')
+```  
+
+## M2A11  
+
+![](./imgAnotacoes/CicloResquestResponse.jpg)  
+
+## M2A12  
+
+Criando formuário de inscrição;  
+Para isso vamos criar uma app dentro de eventex;  
+Vamos fazer isso na mão sem o `manage createapp`  
+Criamos um python package, dentro de `eventex`, com o nome `subscriptions`;  
+Em settings, de eventex, agregamos essa nova app;  
+Installed apps: `eventex.subscriptions`
+
+E vamos começar criando teste!
+
+Criamos um teste que nos forçou criar a view subscription e retornar un HttpResponse.
+
+Para colcoar um template tbm faremos testes!
