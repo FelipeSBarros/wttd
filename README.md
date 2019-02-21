@@ -461,3 +461,31 @@ Memory is conserved by using a generator expression instead:
 `sum(x*x for x in range(10))`  
 Generator expressions are especially useful with functions like sum(), min(), and max() that reduce an iterable input to a single value;  
 List comprehensions greatly reduced the need for filter() and map(). Likewise, generator expressions are expected to minimize the need for itertools.ifilter() and itertools.imap(). In contrast, the utility of other itertools will be enhanced by generator expressions;
+
+## M2A10  
+Criando teste no Django;
+
+O Django já cria em cada app um `tests.py`. Vamos trabalhar no `tests.py` da nossa app `core`;  
+
+Vamos fazer um teste para confirmar se a resposta ao request retorna a html, conforme desejado;
+```python
+class HomTest(TestCase):
+    def test_get(self):
+        response = self.client.get('/')
+        self.assertEqual(200, response.status_code)
+```  
+
+Ao adicionar a docstring:
+`""""GET / must return status code 200"""` ao teste, dita string será exibida em caso de erro, o que ajuda em muito no solução;  
+
+Usando o assert: `self.assertTemplateUsed(response, 'index.html')` podemos confirmar se o response está renderizando o html correto.
+
+**Atenção**: Só usar um assert por método! assim o teste de unidade identifica cada teste.; 
+**Confirmação da template**:  
+```python
+    def test_template(self):
+        """"Must use index.html"""
+        response = self.client.get('/')
+        self.assertTemplateUsed(response, 'index.html')
+```  
+
