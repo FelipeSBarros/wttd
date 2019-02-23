@@ -518,8 +518,53 @@ Criamos um python package, dentro de `eventex`, com o nome `subscriptions`;
 Em settings, de eventex, agregamos essa nova app;  
 Installed apps: `eventex.subscriptions`
 
-E vamos começar criando teste!
+E vamos começar criando teste:
 
-Criamos um teste que nos forçou criar a view subscription e retornar un HttpResponse.
+* **Criamos um teste que nos forçou criar a view subscription e retornar un HttpResponse.**  
+    * self.client.get('/inscricao'):. self.assetEqual(200, response.status_code);
+    * força implementar url; criar modeluo views.py; função subscribe(request), e que este ultimo retorne um HttResponse;
+    * Ao fim temos uma resposta chegando após o request;  
+* **Teste para confirmar o Template a ser usado.**  
+    * self.client.get('/inscricao'):. self.assetTemplateUsed('subscriptions/subscription_from.html');
+    * muda o HttResponse por um render do 'subscriptions/subscription_from.html'  
+    * Cria o template dentro do diretório 'subscriptions' dentro de templates;  
+* refatora criando o setUp que retorna o respose a ser usado nos demais testes;  
+* **Teste de HTML**:  
+    * asserContains: tags de input, text, etc;  
+    * desenvolve a HTML;  
+* csrfToken:  
+    * self.assertContains(self.resp, "csrfmiddlewaretoken")
+    * add csrf token no HTML;  
+    * troca teste de input para 6 já que o csrf consa como mais um input;  
+* Conctando o HMTL com o DJango;  
+    * O template é organizado num contexto (dicationary like). É nele que ficam as área dinâmicas do formulário;  
+    * Vamos criar uma classe subscriptionform e o formulário deve ser uma instancia dessa classe; 
+    Por isso:
+        * self.assertIsInstance(form, SubscriptionForm);
+        * Cria forms.py dentro de subscriptions;  
+    
+    * Ao fim: `forms.py`  
+    
+```python
+from django import forms
 
-Para colcoar um template tbm faremos testes!
+
+class SubscriptionForm(forms.Form):
+    name = forms.CharField(label = "Nome")
+    cpf = forms.CharField(label = "CPF")
+    email = forms.EmailField(label = "E-mail")
+    phone = forms.CharField(label = "Telefone")
+```  
+`
+    * e em subscriptions/views.py:  
+    
+```python
+def subscribe(request):
+    context = {'form': SubscriptionForm()}
+    return render(request, 'subscriptions/subscription_form.html', context)
+``` 
+'
+    * Muda HTML adicionando marcações do template do Django; Adicioanr uma variavel do contexto do template;  
+    
+* Após isso o formulário está sendo criado pelo Django.  
+
