@@ -568,3 +568,6 @@ def subscribe(request):
     
 * Após isso o formulário está sendo criado pelo Django.  
 
+## M2A13: Como sei quem se inscreveu?  
+
+Parei em 27:22 configurando email do nosso projeto.
