@@ -570,4 +570,21 @@ def subscribe(request):
 
 ## M2A13: Como sei quem se inscreveu?  
 
-Parei em 27:22 configurando email do nosso projeto.
+* Articulamos o formulário com processo de inscrição, no qual envia e-mail confirmando, considerando sucesso no processo de inscrição;  
+* Ao confirmar os dados inseridos, o participante é redirecionado à página de inscrição na qual ve uma msg de sucesso;  
+* O e-mail pe construido com marcações para serem atualizados a cada inscriçao a partir do POST no form; E é renderizado usando "*render_to_string*"; 
+No fim todo o processo está passando pelo Django;  
+* Há um metodo full_clean() que identifica e cria um dict com todos os dados corretos inseridos no form; Assim como tem um dict para cada dado errado.  
+* Outro método, é o is_valid(), o qual faz a validação, chamando o full_clean();  
+* Confirma que o form tenha o formulários, os erros, se for o caso.  
+* Para enviar e-mail a conexão foi recusada. É preciso trocar o backend normal do Django, o SMTP;  
+No Heroku, vamos usar a APP chamada SendGrid;  
+* Mailinator para testar e-mail sem poluir conta propria;  
+* Para confirmação, após o POST, se faz um GET mais com a msg de sucesso na inscrição;  
+* Mensagem é adicionada na VIEW antes do redirect e no tamplate, um for para printar as mensagens, caso haja alguma (via cookie);  
+
+## M2A14: Customizando pagina de erro;  
+
+Bastar ter arquivos 400.html; 403.html; 404.html e 500.html na pasta templates para que o Django os encontre; 
+Com relação ao erro 500 o Django já avisa por log.  
+É preciso adicionar tag static, assim como foi feito com index.hml;   
