@@ -587,4 +587,10 @@ No Heroku, vamos usar a APP chamada SendGrid;
 
 Bastar ter arquivos 400.html; 403.html; 404.html e 500.html na pasta templates para que o Django os encontre; 
 Com relação ao erro 500 o Django já avisa por log.  
-É preciso adicionar tag static, assim como foi feito com index.hml;   
+É preciso adicionar tag static, assim como foi feito com index.hml;  
+   
+```python
+DEBUG=False manage runserver
+```
+
+## M2A15 Qualidade é responsabilidade de todos  
