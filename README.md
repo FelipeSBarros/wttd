@@ -593,4 +593,76 @@ Com relação ao erro 500 o Django já avisa por log.
 DEBUG=False manage runserver
 ```
 
-## M2A15 Qualidade é responsabilidade de todos  
+## M2A15 Qualidade é responsabilidade de todos    
+  
+Refatorando o código;  
+
+### Transformando modulos de test em pacotes de test
+Coloca todos os testes dentro de um modulo; Um para cada app que temos (core e subscriptions);  
+
+### Refatorando anguns testes de subscribe:
+
+Alterando os vários teste de um `def` colocando-os em um subtest, coo se fosse um loop:
+```python
+        def test_html(self):
+        """html must contain input tags"""
+        tags = (('<form', 1),
+                ('<input', 6),
+                ('type="text"', 3),
+                ('type="email"', 1),
+                ('type="submit"', 1)
+                )
+        for text, count in tags:
+            with self.subTest():
+                assertContains(self.resp, text, count)
+```
+
+O teste `SubscribePostValid`, por exemplo teste o status code, testa se email foi enviado e depois segue analisando o conteúdo do email.    
+Se trata de um sintoma de estar acumulando responsabildiades.  
+Por tanto foi criado novo modulo de teste só sobre validação de email.    
+A mesma coisa foi feita para a validação dos campos do formulário.  
+
+Refatoramos as HTMLs usando um HTML base;
+
+Refatorando subscribe view;
+
+### Criada instrução de uso no README    
+  
+**Como desenvolver**  
+
+1. clone repositorio;  
+1.  Crie virtual env com Python 3.5;  
+1. Active virtualenv;  
+1. Instale dependencias;  
+1. Configure a instancia com o .env;  
+1. Execute os testes;  
+
+
+
+```console
+git clone https://github.com/FelipeSBarros/wttd.git wttd  
+cd wttd  
+python -m venv .wttd  
+source .wttd/bin/activate  
+pip install -r requirements.text  
+cd contrib/env-sample .env  
+python manage.py test
+```  
+
+**Deploy**
+
+1. Crie uma instancia Heroku;    
+1. Envie config ao Heroku;  
+1. Defina secret_key para instancia;  
+1. Defina DEBUG=False;  
+1. Configure serviço de e-mail;  
+1. Envie código para heroku;  
+  
+```console
+heroku create instance
+heroku config:push
+heroku config:set SECRET_KEY=`python contrib/sercret_gen.py`  
+heroku config:set DEBUG=False  
+# config de email  
+git push heroku master --force  
+```
