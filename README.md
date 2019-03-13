@@ -1,5 +1,7 @@
 # Welcome To The Django
 
+[![Build Status](https://travis-ci.org/FelipeSBarros/wttd.svg?branch=master)](https://travis-ci.org/FelipeSBarros/wttd)  
+
 Repositório com tarefas e anotações extraídas do curso [Welcome to the Django](Welcometothedjango.com)  
 
 ```commandline
@@ -666,3 +668,6 @@ heroku config:set DEBUG=False
 # config de email  
 git push heroku master --force  
 ```
+
+## Travis-CI
+## LandScpae
