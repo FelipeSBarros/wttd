@@ -671,3 +671,14 @@ git push heroku master --force
 
 ### Análise de qualdiad dos códigos:
 Travis-CI & LandScpae, sincronizam o repositório do github e analisam a qualidade do código. Assim, com qualquer alteração, eles rodam o `build`de novo e emitem um sinal de qualdiade.  
+
+# OBS:  
+Caso necessário, ao mudar o projeto de pasta, por algum motivo, se faz necessário, nesssa pasta:  
+  
+1. Logar no heroku;  
+2. Add  o repositório;  
+```commandline
+heroku login
+
+heroku git:remote --app eventex-felipesbarros
+```  
