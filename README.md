@@ -96,7 +96,7 @@ Em core, abrimos `views.py` e inserimos uma função que receberá o request, a 
 O DJango possui um **render** que irá processar o request com um template (index.html) retornando uma instancia do http response....  
 
 ```python
-def home(reques):
+def home(request):
     return render(request, 'index.html')
 ```  
 
@@ -112,7 +112,7 @@ Editamos a HTML para exibir o que desejamos e vemos rodar o servidor para ver o 
 
 ### Adicionando arte do designer  
 
-Em `core`, adicionar uma nova pasta `static` onde colocaremso os arquivos estaticos: `css, fonts, img, js`  
+Em `core`, adicionar uma nova pasta `static` onde colocaremos os arquivos estaticos: `css, fonts, img, js`  
 E o arquivo `index.html` vai para o `template`, substituir o `index.html` criando antes;  
 
 Todos os arquivos estaticos tiveram erro (404) pq os caminhos relativos do designer não bate já que estamos usando o Django para isso e usando pastas diferentes:
@@ -176,7 +176,7 @@ substituir `SECRET_KEY = ASASAQW` por `SECRET_KEY = config('SECRET_KEY')`.
 Sendo que o primeiro será adicionado a um arquivo `.env` na raiz do nosso projeto (**Removendo aspas e espaços**).  
 
 Mesma coisa com `DEBUG`:
-Settings: `DEBUG = config('DEBUG', default=False, cast=bool`  
+Settings: `DEBUG = config('DEBUG', default=False, cast=bool)`  
 .env: `DEBUG=True`  
 
 ### Base de dados  
@@ -192,14 +192,15 @@ Usar sqlite3 em desenvolvimento mas não em produção (usar PostgreSQL)
 Capacidade de parsear e identificar dicionario de configuração do Django  
 
 #### Configuração
-Criar uma url default:
+Criar uma url default em **settings.py**:  
 ```python
 default_dburl = 'sqlite:///' + os.path.join(BASE_DIR, 'db.sqlite3')
 DATABASES = {
     'default': config('DATABASE_URL', default_dburl, cast=dburl),
     }
 ```
-Dessa forma, sempre que for rodada a app, o decouple busca se o `DATABASE_URL` exite no `.env`. Não existindo ele usa o `default_dburl` (SQLite), usando o cast que irá retorná-lo como um dicionário de configuração do Django;  
+Dessa forma, sempre que for rodada a app, o decouple busca se o `DATABASE_URL` exite no `.env`. 
+Não existindo ele usa o `default_dburl` (SQLite), usando o cast que irá retorná-lo como um dicionário de configuração do Django;  
 
 ### Allowed Hosts  
 
@@ -224,6 +225,10 @@ STATIC_ROOT: os.path.join(BASE_DIR, 'staticfiles') #
 
 [dj-static](https://pypi.org/project/dj-static/)
   
+```python
+pip install dj-static
+```  
+
 Agora vamos ao `wsgi.py` e alteramos para:  
 ```python
 import os
@@ -239,6 +244,9 @@ application = Cling(get_wsgi_application())
 
 No terminal:  
 `pip freeze > requirements.txt`
+
+**Requirements** dee estar na pasta raiz do projeto:  
+
 ```commandline
 dj-database-url==0.5.0
 dj-static==0.0.6
@@ -251,8 +259,8 @@ static3==0.7.0
 
 **Porém `heroku` tem algumas outras dependencias.**
 Devemos incluir:  
-`gunicorn=19.8.1`
-`psycopg2=2.7.4`
+`gunicorn==19.8.1`
+`psycopg2==2.7.4`
 
 ### Criando arquivo para heroku iniciar o programa  
 
@@ -345,7 +353,7 @@ DEBUG:         True
 SECRET_KEY:    aaa
 ```
   
-Agora e mandar as alterações ao Heroku pelo Git.
+Agora e mandar as alterações ao Heroku pelo Git.  
 
 **Isso tudo foi feito para que possamos trabalhar em diferentes configurações de ambiente (desenvolvimento/produção) garantindo que`DEBUG`, `ALLOWED_HOSTS` serão bem carregados;
 Diferença entre config de instancia e config de projeto:  
@@ -395,17 +403,16 @@ Toda essa aula foi voltada para mostrar como o Django serve os arquivos estátic
 **TAFT: Test All The Fucking Time!**  
 
 ## M2A07  
+  
+**Todo erro diferente de assertionError é considerado ERRO no teste;**  
+**Quando temos assertionError, temos uma falha!**  
+**Resolver erro é mais prioritário que resolver falha**  
+  
+**Katar**: Esculpir o código conforme a demanda do teste  
+  
+**TDD não é fazer teste combinatório de tudo o que é possível e imaginável**; É criar código com confiança dos limites do código;  
 
-**Todo erro diferente de assertionError é considerado ERRO no teste;**
-**Quando temos assertionError, temos uma falha!**
-**Resolver erro é mais prioritário que resolver falha**
-
-
-**Katar**: Esculpir o código conforme a demanda do teste
-
-**TDD não é fazer teste combinatório de tudo o que é possível e imaginável**; É criar código com confiança dos limites do código;
-
-**O ideal é que as funções tenham apenas um `return`:. um ponto de saida.**
+**O ideal é que as funções tenham apenas um `return`:. um ponto de saida.**  
 
 ## M2A08  
 
@@ -423,16 +430,16 @@ def assert_true(expr):
 
 ### unittest  
 
-classe desenvolvida para facilitar todo o processo de desenvolvimento de testes.
+classe desenvolvida para facilitar todo o processo de desenvolvimento de testes.  
 
 unittest.CaseTest: clase usadas
 unittest.main(): executa os testes
 Os testes passam a ser executados pelo test runner;
-O interessante de usar o unittest é que além da facilidade, pode-se usar  terminal python, o comando:
-`python -m unittest`
+O interessante de usar o unittest é que além da facilidade, pode-se usar  terminal python, o comando:  
+`python -m unittest`  
 Que ele vai varrer os arquivos com extensão .py que tenham `unittest.main()` e os executa, tendo um relatório bem organizado de todos os *testes*, *falhas* e *erros*;  
   
-#### O que o unittest faz?
+#### O que o unittest faz?  
   
 * A partir do dir corrente, o testRunner, vai:
     * Procurar e carregar o módulo/package test*.py; (**Suites de teste**)  
@@ -515,7 +522,7 @@ class HomeTest(TestCase):
 
 Criando formuário de inscrição;  
 Para isso vamos criar uma app dentro de eventex;  
-Vamos fazer isso na mão sem o `manage createapp`  
+Vamos fazer isso na mão **sem usar o `manage createapp`**  
 Criamos um python package, dentro de `eventex`, com o nome `subscriptions`;  
 Em settings, de eventex, agregamos essa nova app;  
 Installed apps: `eventex.subscriptions`
@@ -530,7 +537,7 @@ E vamos começar criando teste:
     * self.client.get('/inscricao'):. self.assetTemplateUsed('subscriptions/subscription_from.html');
     * muda o HttResponse por um render do 'subscriptions/subscription_from.html'  
     * Cria o template dentro do diretório 'subscriptions' dentro de templates;  
-* refatora criando o setUp que retorna o respose a ser usado nos demais testes;  
+    * refatora criando o setUp que retorna o respose a ser usado nos demais testes;  
 * **Teste de HTML**:  
     * asserContains: tags de input, text, etc;  
     * desenvolve a HTML;  
@@ -565,7 +572,7 @@ def subscribe(request):
     context = {'form': SubscriptionForm()}
     return render(request, 'subscriptions/subscription_form.html', context)
 ``` 
-'
+
     * Muda HTML adicionando marcações do template do Django; Adicioanr uma variavel do contexto do template;  
     
 * Após isso o formulário está sendo criado pelo Django.  
@@ -580,8 +587,9 @@ No fim todo o processo está passando pelo Django;
 * Outro método, é o is_valid(), o qual faz a validação, chamando o full_clean();  
 * Confirma que o form tenha o formulários, os erros, se for o caso.  
 * Para enviar e-mail a conexão foi recusada. É preciso trocar o backend normal do Django, o SMTP;  
+
 No Heroku, vamos usar a APP chamada SendGrid;  
-* Mailinator para testar e-mail sem poluir conta propria;  
+* **Mailinator** para testar e-mail sem poluir conta propria;  
 * Para confirmação, após o POST, se faz um GET mais com a msg de sucesso na inscrição;  
 * Mensagem é adicionada na VIEW antes do redirect e no tamplate, um for para printar as mensagens, caso haja alguma (via cookie);  
 
